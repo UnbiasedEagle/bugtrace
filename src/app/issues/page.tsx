@@ -1,7 +1,12 @@
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+
 const IssuesPage = () => {
   return (
     <div>
-      <h1>Issues Page</h1>
+      <Button variant='default'>
+        <Link href='/issues/new'>New Issue</Link>
+      </Button>
     </div>
   );
 };
