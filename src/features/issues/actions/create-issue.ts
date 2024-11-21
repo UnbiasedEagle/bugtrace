@@ -3,9 +3,9 @@
 import prisma from '@/lib/db';
 import { CreateIssueSchema } from '../schemas/CreateIssue';
 
-export const createIssue = async (formData: FormData) => {
+export const createIssue = async (prevState: unknown, formData: FormData) => {
   try {
-    const validate = CreateIssueSchema.safeParse(formData);
+    const validate = CreateIssueSchema.safeParse(Object.fromEntries(formData));
 
     if (!validate.success) {
       return {
@@ -24,6 +24,7 @@ export const createIssue = async (formData: FormData) => {
     return {
       message: 'Issue created successfully',
       success: true,
+      error: '',
     };
   } catch (error) {
     return {
