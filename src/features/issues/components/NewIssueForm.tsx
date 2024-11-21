@@ -2,29 +2,36 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
 import 'easymde/dist/easymde.min.css';
-import { useActionState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { startTransition, useActionState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import SimpleMDE from 'react-simplemde-editor';
-import { createIssue } from '../actions/create-issue';
-import { startTransition } from 'react';
-import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { createIssue } from '../actions/create-issue';
+import { CreateIssueSchema } from '../schemas/CreateIssue';
 
-interface IssueForm {
-  title: string;
-  description: string;
-}
+type IssueForm = z.infer<typeof CreateIssueSchema>;
 
 export const NewIssueForm = () => {
   const router = useRouter();
   const [state, action, isPending] = useActionState(createIssue, undefined);
 
-  const { register, control, handleSubmit } = useForm<IssueForm>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IssueForm>({
+    resolver: zodResolver(CreateIssueSchema),
+  });
 
   const onSubmit = (data: IssueForm) => {
     const formData = new FormData();
+
     formData.append('title', data.title);
     formData.append('description', data.description ?? '');
 
@@ -45,11 +52,17 @@ export const NewIssueForm = () => {
   return (
     <form className='max-w-xl space-y-3' onSubmit={handleSubmit(onSubmit)}>
       <Input placeholder='Title' {...register('title')} />
+      {errors.title && <p className='text-red-500'>{errors.title.message}</p>}
       <Controller
         name='description'
         control={control}
         render={({ field }) => (
-          <SimpleMDE placeholder='Description' {...field} />
+          <>
+            <SimpleMDE placeholder='Description' {...field} />
+            {errors.description && (
+              <p className='text-red-500'>{errors.description.message}</p>
+            )}
+          </>
         )}
       />
       <Button disabled={isPending}>
