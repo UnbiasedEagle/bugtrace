@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { ErrorMessage } from '@/components/ui/error-message';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import 'easymde/dist/easymde.min.css';
@@ -52,7 +53,7 @@ export const NewIssueForm = () => {
   return (
     <form className='max-w-xl space-y-3' onSubmit={handleSubmit(onSubmit)}>
       <Input placeholder='Title' {...register('title')} />
-      {errors.title && <p className='text-red-500'>{errors.title.message}</p>}
+      {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
       <Controller
         name='description'
         control={control}
@@ -60,7 +61,7 @@ export const NewIssueForm = () => {
           <>
             <SimpleMDE placeholder='Description' {...field} />
             {errors.description && (
-              <p className='text-red-500'>{errors.description.message}</p>
+              <ErrorMessage>{errors.description.message}</ErrorMessage>
             )}
           </>
         )}
