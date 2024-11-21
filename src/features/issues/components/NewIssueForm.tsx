@@ -3,9 +3,9 @@
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { Input } from '@/components/ui/input';
+import { LoadingButton } from '@/components/ui/loading-button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import 'easymde/dist/easymde.min.css';
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { startTransition, useActionState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -66,10 +66,11 @@ export const NewIssueForm = () => {
           </>
         )}
       />
-      <Button disabled={isPending}>
-        {isPending && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-        Submit New Issue
-      </Button>
+      {isPending ? (
+        <LoadingButton />
+      ) : (
+        <Button type='submit'>Submit New Issue</Button>
+      )}
     </form>
   );
 };
