@@ -1,5 +1,4 @@
-import prisma from '@/lib/db';
-import { notFound } from 'next/navigation';
+import { IssueDetail } from '@/features/issues/components/issue-detail';
 
 interface Props {
   params: {
@@ -8,28 +7,7 @@ interface Props {
 }
 
 const IssueDetailPage = async ({ params }: Props) => {
-  if (Number.isNaN(+params.id)) {
-    notFound();
-  }
-
-  const issue = await prisma.issue.findUnique({
-    where: {
-      id: +params.id,
-    },
-  });
-
-  if (!issue) {
-    notFound();
-  }
-
-  return (
-    <div>
-      <h1>Issue Detail Page</h1>
-      <p>{issue.title}</p>
-      <p>{issue.description}</p>
-      <p>{issue.status}</p>
-    </div>
-  );
+  return <IssueDetail issueId={params.id} />;
 };
 
 export default IssueDetailPage;
