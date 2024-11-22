@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/error-message';
+import { ErrorMessage } from '@/components/error-message';
 import { Input } from '@/components/ui/input';
-import { LoadingButton } from '@/components/ui/loading-button';
+import { LoadingButton } from '@/components/loading-button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import 'easymde/dist/easymde.min.css';
 import { useRouter } from 'next/navigation';

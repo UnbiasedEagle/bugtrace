@@ -1,4 +1,4 @@
-import { NewIssueForm } from '@/features/issues/components/NewIssueForm';
+import { NewIssueForm } from '@/features/issues/components/new-issue-form';
 
 const NewIssuePage = () => {
   return <NewIssueForm />;
