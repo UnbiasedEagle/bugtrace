@@ -1,5 +1,7 @@
+import { LoadingNewIssue } from '@/features/issues/components/loading-new-issue';
+
 const NewIssueLoadingPage = () => {
-  return <div>Loading...</div>;
+  return <LoadingNewIssue />;
 };
 
 export default NewIssueLoadingPage;

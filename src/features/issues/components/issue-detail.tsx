@@ -1,6 +1,7 @@
 import { IssueBadge } from '@/components/issue-badge';
 import { Card, CardContent } from '@/components/ui/card';
 import prisma from '@/lib/db';
+import { delay } from '@/lib/utils';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 
@@ -12,6 +13,8 @@ export const IssueDetail = async ({ issueId }: Props) => {
   if (Number.isNaN(+issueId)) {
     notFound();
   }
+
+  await delay(1000);
 
   const issue = await prisma.issue.findUnique({
     where: {
@@ -26,7 +29,7 @@ export const IssueDetail = async ({ issueId }: Props) => {
   return (
     <div>
       <h1 className='text-2xl font-bold'>{issue.title}</h1>
-      <div className='flex space-x-3 my-2'>
+      <div className='flex items-center space-x-3 my-2'>
         <IssueBadge status={issue.status} />
         <p>{issue.createdAt.toDateString()}</p>
       </div>

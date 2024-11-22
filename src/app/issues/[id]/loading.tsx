@@ -1,5 +1,7 @@
+import { LoadingIssueDetail } from '@/features/issues/components/loading-issue-detail';
+
 const IssueDetailLoadingPage = () => {
-  return <div>Loading...</div>;
+  return <LoadingIssueDetail />;
 };
 
 export default IssueDetailLoadingPage;

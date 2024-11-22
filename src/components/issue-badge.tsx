@@ -1,5 +1,6 @@
 import { Status } from '@prisma/client';
 import { Badge } from './ui/badge';
+import { cn } from '@/lib/utils';
 
 interface Props {
   status: Status;
@@ -23,5 +24,5 @@ const statusMap: Record<Status, { label: string; color: string }> = {
 export const IssueBadge = ({ status }: Props) => {
   const { label, color } = statusMap[status];
 
-  return <Badge className={color}>{label}</Badge>;
+  return <Badge className={cn(`hover:${color}`, color)}>{label}</Badge>;
 };

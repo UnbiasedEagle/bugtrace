@@ -1,13 +1,14 @@
 import { IssueDetail } from '@/features/issues/components/issue-detail';
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 const IssueDetailPage = async ({ params }: Props) => {
-  return <IssueDetail issueId={params.id} />;
+  const id = (await params).id;
+  return <IssueDetail issueId={id} />;
 };
 
 export default IssueDetailPage;
