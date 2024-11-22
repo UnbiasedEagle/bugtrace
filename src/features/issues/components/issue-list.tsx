@@ -1,3 +1,4 @@
+import { IssueBadge } from '@/components/issue-badge';
 import {
   Table,
   TableBody,
@@ -28,10 +29,12 @@ export const IssueList = async () => {
           <TableRow key={issue.id}>
             <TableHead>
               {issue.title}
-              <div className='block md:hidden'>{issue.status}</div>
+              <div className='block md:hidden'>
+                <IssueBadge status={issue.status} />
+              </div>
             </TableHead>
             <TableHead className='hidden md:table-cell'>
-              {issue.status}
+              <IssueBadge status={issue.status} />
             </TableHead>
             <TableHead className='hidden md:table-cell'>
               {issue.createdAt.toDateString()}
