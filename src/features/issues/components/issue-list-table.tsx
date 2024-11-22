@@ -7,15 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import prisma from '@/lib/db';
+import { getIssues } from '@/features/issues/db';
 import Link from 'next/link';
 
 export const IssueListTable = async () => {
-  const issues = await prisma.issue.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+  const issues = await getIssues();
 
   return (
     <Table className='border'>

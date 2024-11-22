@@ -1,12 +1,9 @@
 import { IssueBadge } from '@/components/issue-badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import prisma from '@/lib/db';
-import { delay } from '@/lib/utils';
-import { EditIcon } from 'lucide-react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+import { getIssue } from '../db';
+import { EditIssueBtn } from './edit-issue-btn';
 
 interface Props {
   issueId: string;
@@ -17,13 +14,7 @@ export const IssueDetail = async ({ issueId }: Props) => {
     notFound();
   }
 
-  await delay(1000);
-
-  const issue = await prisma.issue.findUnique({
-    where: {
-      id: +issueId,
-    },
-  });
+  const issue = await getIssue(+issueId);
 
   if (!issue) {
     notFound();
@@ -44,11 +35,7 @@ export const IssueDetail = async ({ issueId }: Props) => {
         </Card>
       </div>
       <div>
-        <Button asChild>
-          <Link href={`/issues/${issue.id}/edit`}>
-            <EditIcon /> Edit Issue
-          </Link>
-        </Button>
+        <EditIssueBtn issueId={issue.id} />
       </div>
     </div>
   );
