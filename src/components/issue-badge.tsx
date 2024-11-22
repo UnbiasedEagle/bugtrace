@@ -13,7 +13,7 @@ const statusMap: Record<Status, { label: string; color: string }> = {
   },
   IN_PROGRESS: {
     label: 'In Progress',
-    color: 'bg-violet-500',
+    color: 'bg-yellow-500',
   },
   CLOSED: {
     label: 'Closed',
