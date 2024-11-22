@@ -1,4 +1,4 @@
-import { IssueBadge } from '@/components/issue-badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -6,10 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import prisma from '@/lib/db';
 
-export const IssueList = async () => {
-  const issues = await prisma.issue.findMany();
+export const LoadingIssueListTable = async () => {
+  const issues = Array.from({ length: 5 }, (_, idx) => idx);
 
   return (
     <Table className='border'>
@@ -26,18 +25,18 @@ export const IssueList = async () => {
       </TableHeader>
       <TableBody>
         {issues.map((issue) => (
-          <TableRow key={issue.id}>
+          <TableRow key={issue}>
             <TableHead>
-              {issue.title}
+              <Skeleton className='h-4 w-1/2' />
               <div className='block md:hidden'>
-                <IssueBadge status={issue.status} />
+                <Skeleton className='px-2.5 py-0.5 h-5 w-16 rounded-full' />
               </div>
             </TableHead>
             <TableHead className='hidden md:table-cell'>
-              <IssueBadge status={issue.status} />
+              <Skeleton className='px-2.5 py-0.5 h-5 w-16 rounded-full' />
             </TableHead>
             <TableHead className='hidden md:table-cell'>
-              {issue.createdAt.toDateString()}
+              <Skeleton className='h-4 w-1/2' />
             </TableHead>
           </TableRow>
         ))}

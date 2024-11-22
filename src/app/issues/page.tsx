@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { IssueList } from '@/features/issues/components/issue-list';
+import { IssueListTable } from '@/features/issues/components/issue-list-table';
+import { LoadingIssueListTable } from '@/features/issues/components/loading-issue-list-table';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 const IssuesPage = () => {
   return (
@@ -10,7 +12,9 @@ const IssuesPage = () => {
           <Link href='/issues/new'>New Issue</Link>
         </Button>
       </div>
-      <IssueList />
+      <Suspense fallback={<LoadingIssueListTable />}>
+        <IssueListTable />
+      </Suspense>
     </div>
   );
 };
