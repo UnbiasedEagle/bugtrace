@@ -7,11 +7,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import prisma from '@/lib/db';
-import { delay } from '@/lib/utils';
+import Link from 'next/link';
 
 export const IssueListTable = async () => {
-  await delay(5000);
-
   const issues = await prisma.issue.findMany({
     orderBy: {
       createdAt: 'desc',
@@ -35,7 +33,7 @@ export const IssueListTable = async () => {
         {issues.map((issue) => (
           <TableRow key={issue.id}>
             <TableHead>
-              {issue.title}
+              <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
               <div className='block md:hidden'>
                 <IssueBadge status={issue.status} />
               </div>
