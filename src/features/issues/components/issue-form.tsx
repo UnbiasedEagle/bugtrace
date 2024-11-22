@@ -1,0 +1,89 @@
+'use client';
+
+import { ErrorMessage } from '@/components/error-message';
+import { LoadingButton } from '@/components/loading-button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import 'easymde/dist/easymde.min.css';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import { startTransition, useActionState, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { createIssue } from '../actions/create-issue';
+import { CreateIssueSchema } from '../schemas/CreateIssue';
+import { Issue } from '@prisma/client';
+
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
+  ssr: false,
+});
+
+type IssueFormData = z.infer<typeof CreateIssueSchema>;
+
+interface Props {
+  issue?: Issue;
+}
+
+export const IssueForm = ({ issue }: Props) => {
+  const router = useRouter();
+  const [state, action, isPending] = useActionState(createIssue, undefined);
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IssueFormData>({
+    resolver: zodResolver(CreateIssueSchema),
+    defaultValues: {
+      title: issue?.title ?? '',
+      description: issue?.description ?? '',
+    },
+  });
+
+  const onSubmit = (data: IssueFormData) => {
+    const formData = new FormData();
+
+    formData.append('title', data.title);
+    formData.append('description', data.description ?? '');
+
+    startTransition(() => {
+      action(formData);
+    });
+  };
+
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.error);
+    } else if (state?.success) {
+      router.push('/issues');
+      toast.success('Issue created successfully');
+    }
+  }, [state?.error, state?.success, router]);
+
+  return (
+    <form className='max-w-xl space-y-3' onSubmit={handleSubmit(onSubmit)}>
+      <Input placeholder='Title' {...register('title')} />
+      {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
+      <Controller
+        name='description'
+        control={control}
+        render={({ field }) => (
+          <>
+            <SimpleMDE placeholder='Description' {...field} />
+            {errors.description && (
+              <ErrorMessage>{errors.description.message}</ErrorMessage>
+            )}
+          </>
+        )}
+      />
+      {isPending ? (
+        <LoadingButton />
+      ) : (
+        <Button type='submit'>Submit New Issue</Button>
+      )}
+    </form>
+  );
+};
