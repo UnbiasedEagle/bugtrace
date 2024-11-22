@@ -1,4 +1,5 @@
 import { IssueBadge } from '@/components/issue-badge';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -33,7 +34,9 @@ export const IssueListTable = async () => {
         {issues.map((issue) => (
           <TableRow key={issue.id}>
             <TableHead>
-              <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+              <Button variant='link' asChild>
+                <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+              </Button>
               <div className='block md:hidden'>
                 <IssueBadge status={issue.status} />
               </div>
