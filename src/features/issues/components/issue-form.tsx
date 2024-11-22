@@ -5,6 +5,7 @@ import { LoadingButton } from '@/components/loading-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Issue } from '@prisma/client';
 import 'easymde/dist/easymde.min.css';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -12,15 +13,14 @@ import { startTransition, useActionState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { createIssue } from '../actions/create-issue';
-import { CreateIssueSchema } from '../schemas/CreateIssue';
-import { Issue } from '@prisma/client';
+import { createIssueAction, updateIssueAction } from '../actions';
+import { IssueSchema } from '../schemas';
 
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 });
 
-type IssueFormData = z.infer<typeof CreateIssueSchema>;
+type IssueFormData = z.infer<typeof IssueSchema>;
 
 interface Props {
   issue?: Issue;
@@ -28,7 +28,10 @@ interface Props {
 
 export const IssueForm = ({ issue }: Props) => {
   const router = useRouter();
-  const [state, action, isPending] = useActionState(createIssue, undefined);
+  const [state, action, isPending] = useActionState(
+    issue ? updateIssueAction.bind(null, issue.id) : createIssueAction,
+    undefined
+  );
 
   const {
     register,
@@ -36,7 +39,7 @@ export const IssueForm = ({ issue }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(CreateIssueSchema),
+    resolver: zodResolver(IssueSchema),
     defaultValues: {
       title: issue?.title ?? '',
       description: issue?.description ?? '',
@@ -47,7 +50,7 @@ export const IssueForm = ({ issue }: Props) => {
     const formData = new FormData();
 
     formData.append('title', data.title);
-    formData.append('description', data.description ?? '');
+    formData.append('description', data.description);
 
     startTransition(() => {
       action(formData);
@@ -59,9 +62,9 @@ export const IssueForm = ({ issue }: Props) => {
       toast.error(state.error);
     } else if (state?.success) {
       router.push('/issues');
-      toast.success('Issue created successfully');
+      toast.success(state.message);
     }
-  }, [state?.error, state?.success, router]);
+  }, [state?.error, state?.success, router, state?.message]);
 
   return (
     <form className='max-w-xl space-y-3' onSubmit={handleSubmit(onSubmit)}>
@@ -82,7 +85,7 @@ export const IssueForm = ({ issue }: Props) => {
       {isPending ? (
         <LoadingButton />
       ) : (
-        <Button type='submit'>Submit New Issue</Button>
+        <Button type='submit'>{issue ? 'Update Issue' : 'Create Issue'}</Button>
       )}
     </form>
   );

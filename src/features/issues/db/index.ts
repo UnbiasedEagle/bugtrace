@@ -19,3 +19,42 @@ export const getIssues = async () => {
 
   return issues;
 };
+
+export const createIssue = async ({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) => {
+  const issue = await prisma.issue.create({
+    data: {
+      title,
+      description,
+    },
+  });
+
+  return issue;
+};
+
+export const updateIssue = async ({
+  issueId,
+  title,
+  description,
+}: {
+  issueId: number;
+  title: string;
+  description: string;
+}) => {
+  const issue = await prisma.issue.update({
+    where: {
+      id: issueId,
+    },
+    data: {
+      title,
+      description,
+    },
+  });
+
+  return issue;
+};
