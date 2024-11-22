@@ -2,6 +2,7 @@ import { IssueBadge } from '@/components/issue-badge';
 import { Card, CardContent } from '@/components/ui/card';
 import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
 
 interface Props {
   issueId: string;
@@ -29,9 +30,9 @@ export const IssueDetail = async ({ issueId }: Props) => {
         <IssueBadge status={issue.status} />
         <p>{issue.createdAt.toDateString()}</p>
       </div>
-      <Card>
-        <CardContent className='p-4'>
-          <p>{issue.description}</p>
+      <Card className='mt-4'>
+        <CardContent className='p-4 prose'>
+          <ReactMarkdown>{issue.description}</ReactMarkdown>
         </CardContent>
       </Card>
     </div>
