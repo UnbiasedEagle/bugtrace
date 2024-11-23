@@ -58,3 +58,11 @@ export const updateIssue = async ({
 
   return issue;
 };
+
+export const deleteIssue = async (issueId: number) => {
+  await prisma.issue.delete({
+    where: {
+      id: issueId,
+    },
+  });
+};

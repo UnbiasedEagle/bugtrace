@@ -1,8 +1,9 @@
 'use server';
 
-import { IssueSchema } from '../schemas';
-import { createIssue, updateIssue } from '../db';
 import { revalidatePath } from 'next/cache';
+import { createIssue, deleteIssue, updateIssue } from '../db';
+import { IssueSchema } from '../schemas';
+import { redirect } from 'next/navigation';
 
 export const createIssueAction = async (
   prevState: unknown,
@@ -71,5 +72,19 @@ export const updateIssueAction = async (
       error: (error as Error).message,
       success: false,
     };
+  }
+};
+
+export const deleteIssueAction = async (issueId: number) => {
+  try {
+    await deleteIssue(issueId);
+    revalidatePath('/issues');
+  } catch (error) {
+    return {
+      error: (error as Error).message,
+      success: false,
+    };
+  } finally {
+    redirect('/issues');
   }
 };

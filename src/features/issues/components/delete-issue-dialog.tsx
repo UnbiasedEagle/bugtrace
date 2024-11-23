@@ -1,21 +1,31 @@
+'use client';
+
+import { LoadingButton } from '@/components/loading-button';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog';
 import { TrashIcon } from 'lucide-react';
+import { useActionState } from 'react';
+import { deleteIssueAction } from '../actions';
 
 interface Props {
   issueId: number;
 }
 
 export const DeleteIssueDialog = ({ issueId }: Props) => {
+  const [, deleteIssue, isPending] = useActionState(
+    deleteIssueAction.bind(null, issueId),
+    null
+  );
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -35,8 +45,14 @@ export const DeleteIssueDialog = ({ issueId }: Props) => {
           <DialogClose asChild>
             <Button variant='secondary'>Cancel</Button>
           </DialogClose>
-          <form>
-            <Button variant='destructive'>Delete</Button>
+          <form action={deleteIssue}>
+            {isPending ? (
+              <LoadingButton variant='destructive' />
+            ) : (
+              <Button type='submit' variant='destructive'>
+                Delete
+              </Button>
+            )}
           </form>
         </DialogFooter>
       </DialogContent>
