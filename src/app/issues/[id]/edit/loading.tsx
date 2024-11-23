@@ -1,7 +1,7 @@
 import { LoadingIssueForm } from '@/features/issues/components/loading-issue-form';
 
-const NewIssueLoadingPage = () => {
+const LoadingEditIssue = () => {
   return <LoadingIssueForm />;
 };
 
-export default NewIssueLoadingPage;
+export default LoadingEditIssue;

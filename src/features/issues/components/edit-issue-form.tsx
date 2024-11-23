@@ -1,17 +1,21 @@
-import { notFound } from 'next/navigation';
-import { getIssue } from '../db';
-import { IssueForm } from './issue-form';
+'use client';
+
+import { Issue } from '@prisma/client';
+import dynamic from 'next/dynamic';
+import { LoadingIssueForm } from './loading-issue-form';
+
+const IssueForm = dynamic(
+  () => import('@/features/issues/components/issue-form'),
+  {
+    ssr: false,
+    loading: () => <LoadingIssueForm />,
+  }
+);
 
 interface Props {
-  issueId: string;
+  issue: Issue;
 }
 
-export const EditIssueForm = async ({ issueId }: Props) => {
-  const issue = await getIssue(+issueId);
-
-  if (!issue) {
-    notFound();
-  }
-
+export const EditIssueForm = ({ issue }: Props) => {
   return <IssueForm issue={issue} />;
 };

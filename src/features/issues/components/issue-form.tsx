@@ -1,5 +1,3 @@
-'use client';
-
 import { ErrorMessage } from '@/components/error-message';
 import { LoadingButton } from '@/components/loading-button';
 import { Button } from '@/components/ui/button';
@@ -7,18 +5,14 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Issue } from '@prisma/client';
 import 'easymde/dist/easymde.min.css';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { startTransition, useActionState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import SimpleMDE from 'react-simplemde-editor';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { createIssueAction, updateIssueAction } from '../actions';
 import { IssueSchema } from '../schemas';
-
-const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
-  ssr: false,
-});
 
 type IssueFormData = z.infer<typeof IssueSchema>;
 
@@ -26,7 +20,7 @@ interface Props {
   issue?: Issue;
 }
 
-export const IssueForm = ({ issue }: Props) => {
+const IssueForm = ({ issue }: Props) => {
   const router = useRouter();
   const [state, action, isPending] = useActionState(
     issue ? updateIssueAction.bind(null, issue.id) : createIssueAction,
@@ -90,3 +84,5 @@ export const IssueForm = ({ issue }: Props) => {
     </form>
   );
 };
+
+export default IssueForm;
