@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { createIssue, deleteIssue, updateIssue } from '../db';
 import { IssueSchema } from '../schemas';
 import { redirect } from 'next/navigation';
+import { auth } from '@clerk/nextjs/server';
 
 export const createIssueAction = async (
   prevState: unknown,
@@ -17,6 +18,12 @@ export const createIssueAction = async (
         error: validate.error.errors[0].message,
         success: false,
       };
+    }
+
+    const { userId, redirectToSignIn } = await auth();
+
+    if (!userId) {
+      return redirectToSignIn();
     }
 
     await createIssue({
@@ -54,6 +61,12 @@ export const updateIssueAction = async (
       };
     }
 
+    const { userId, redirectToSignIn } = await auth();
+
+    if (!userId) {
+      return redirectToSignIn();
+    }
+
     await updateIssue({
       issueId,
       title: validate.data.title,
@@ -77,7 +90,14 @@ export const updateIssueAction = async (
 
 export const deleteIssueAction = async (issueId: number) => {
   let redirectPath: string | null = null;
+
   try {
+    const { userId, redirectToSignIn } = await auth();
+
+    if (!userId) {
+      return redirectToSignIn();
+    }
+
     await deleteIssue(issueId);
     revalidatePath('/issues');
     redirectPath = '/issues';
