@@ -76,15 +76,19 @@ export const updateIssueAction = async (
 };
 
 export const deleteIssueAction = async (issueId: number) => {
+  let redirectPath: string | null = null;
   try {
     await deleteIssue(issueId);
     revalidatePath('/issues');
+    redirectPath = '/issues';
   } catch (error) {
     return {
       error: (error as Error).message,
       success: false,
     };
   } finally {
-    redirect('/issues');
+    if (redirectPath) {
+      redirect(redirectPath);
+    }
   }
 };

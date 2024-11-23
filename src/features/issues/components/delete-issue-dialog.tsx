@@ -13,18 +13,25 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { TrashIcon } from 'lucide-react';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { deleteIssueAction } from '../actions';
+import { toast } from 'sonner';
 
 interface Props {
   issueId: number;
 }
 
 export const DeleteIssueDialog = ({ issueId }: Props) => {
-  const [, deleteIssue, isPending] = useActionState(
+  const [state, deleteIssue, isPending] = useActionState(
     deleteIssueAction.bind(null, issueId),
     null
   );
+
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
 
   return (
     <Dialog>

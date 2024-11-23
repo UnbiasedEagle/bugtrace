@@ -60,9 +60,13 @@ export const updateIssue = async ({
 };
 
 export const deleteIssue = async (issueId: number) => {
-  await prisma.issue.delete({
-    where: {
-      id: issueId,
-    },
-  });
+  try {
+    await prisma.issue.delete({
+      where: {
+        id: issueId,
+      },
+    });
+  } catch {
+    throw new Error('Failed to delete issue');
+  }
 };
