@@ -8,7 +8,7 @@ interface Props {
 
 export const EditIssueBtn = ({ issueId }: Props) => {
   return (
-    <Button asChild>
+    <Button className='w-full' asChild>
       <Link href={`/issues/${issueId}/edit`}>
         <EditIcon /> Edit Issue
       </Link>
