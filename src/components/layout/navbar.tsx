@@ -1,10 +1,11 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { UserButton } from '@clerk/nextjs';
+import { useAuth, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AiFillBug } from 'react-icons/ai';
+import { Skeleton } from '../ui/skeleton';
 
 const links = [
   { href: '/', label: 'Dashboard' },
@@ -12,6 +13,7 @@ const links = [
 ];
 
 export const Navbar = () => {
+  const { isLoaded } = useAuth();
   const pathName = usePathname();
 
   return (
@@ -36,7 +38,8 @@ export const Navbar = () => {
           ))}
         </ul>
         <div className='flex items-center ml-auto'>
-          <UserButton />
+          {!isLoaded && <Skeleton className='h-8 w-8 rounded-full' />}
+          {isLoaded && <UserButton />}
         </div>
       </div>
     </nav>
