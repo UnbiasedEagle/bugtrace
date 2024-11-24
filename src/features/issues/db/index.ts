@@ -14,20 +14,29 @@ export const getIssue = async (issueId: number) => {
 export const getIssues = async ({
   status,
   orderBy,
+  page,
 }: {
   status: Status | undefined;
   orderBy: keyof Issue;
+  page: number;
 }) => {
-  const issues = await prisma.issue.findMany({
-    orderBy: {
-      [orderBy]: 'asc',
-    },
-    where: {
-      status: status,
-    },
-  });
+  const where = {
+    status: status,
+  };
 
-  return issues;
+  const [issues, count] = await Promise.all([
+    prisma.issue.findMany({
+      orderBy: {
+        [orderBy]: 'asc',
+      },
+      where,
+      skip: (page - 1) * 10,
+      take: 10,
+    }),
+    prisma.issue.count({ where }),
+  ]);
+
+  return { issues, count };
 };
 
 export const createIssue = async ({

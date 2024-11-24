@@ -1,3 +1,4 @@
+import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
 import { IssueActions } from '@/features/issues/components/issue-actions';
 import { IssueListTable } from '@/features/issues/components/issue-list-table';
 import { getIssues } from '@/features/issues/db';
@@ -7,6 +8,7 @@ interface Props {
   searchParams: Promise<{
     status: Status;
     orderBy: keyof Issue;
+    page?: string;
   }>;
 }
 
@@ -22,15 +24,21 @@ const IssuesPage = async ({ searchParams }: Props) => {
     ? params.orderBy
     : 'createdAt';
 
-  const issues = await getIssues({
+  const page = params.page ?? '1';
+
+  const { issues, count } = await getIssues({
     status,
     orderBy,
+    page: +page,
   });
 
   return (
     <div>
       <IssueActions />
       <IssueListTable searchParams={params} issues={issues} />
+      <div className='mt-5'>
+        <PaginationWithLinks page={+page} pageSize={10} totalCount={count} />
+      </div>
     </div>
   );
 };
