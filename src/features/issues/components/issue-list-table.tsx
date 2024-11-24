@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -69,20 +70,20 @@ export const IssueListTable = ({ issues, searchParams }: Props) => {
       <TableBody>
         {issues.map((issue) => (
           <TableRow key={issue.id}>
-            <TableHead>
+            <TableCell>
               <Button variant='link' asChild>
                 <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
               </Button>
-              <div className='block md:hidden'>
+              <div className='block mt-2 md:hidden'>
                 <IssueBadge status={issue.status} />
               </div>
-            </TableHead>
-            <TableHead className='hidden md:table-cell'>
+            </TableCell>
+            <TableCell className='hidden md:table-cell'>
               <IssueBadge status={issue.status} />
-            </TableHead>
-            <TableHead className='hidden md:table-cell'>
+            </TableCell>
+            <TableCell className='hidden md:table-cell'>
               {issue.createdAt.toDateString()}
-            </TableHead>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

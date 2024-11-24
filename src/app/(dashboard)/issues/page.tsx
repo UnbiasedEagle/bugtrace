@@ -2,6 +2,7 @@ import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
 import { IssueActions } from '@/features/issues/components/issue-actions';
 import { IssueListTable } from '@/features/issues/components/issue-list-table';
 import { getIssues } from '@/features/issues/db';
+import { PAGE_SIZE } from '@/lib/constants';
 import { Issue, Status } from '@prisma/client';
 
 interface Props {
@@ -41,7 +42,11 @@ const IssuesPage = async ({ searchParams }: Props) => {
       <IssueActions />
       <IssueListTable searchParams={params} issues={issues} />
       <div className='mt-5'>
-        <PaginationWithLinks page={+page} pageSize={10} totalCount={count} />
+        <PaginationWithLinks
+          page={+page}
+          pageSize={PAGE_SIZE}
+          totalCount={count}
+        />
       </div>
     </div>
   );

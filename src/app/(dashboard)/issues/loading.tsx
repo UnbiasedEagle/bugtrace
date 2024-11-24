@@ -9,6 +9,9 @@ const LoadingIssues = () => {
         <Skeleton className='h-10 w-24' />
       </div>
       <LoadingIssueListTable />
+      <div className='mt-5 flex justify-end'>
+        <Skeleton className='h-10 w-96' />
+      </div>
     </div>
   );
 };
