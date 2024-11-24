@@ -1,7 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createIssue, deleteIssue, updateIssue } from '../db';
+import {
+  assignUserToIssue,
+  createIssue,
+  deleteIssue,
+  updateIssue,
+} from '../db';
 import { IssueSchema } from '../schemas';
 import { redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
@@ -110,5 +115,25 @@ export const deleteIssueAction = async (issueId: number) => {
     if (redirectPath) {
       redirect(redirectPath);
     }
+  }
+};
+
+export const assignUserToIssueAction = async (
+  issueId: number,
+  userId: string | null
+) => {
+  try {
+    await assignUserToIssue(issueId, userId);
+    revalidatePath(`/issues/${issueId}`);
+    return {
+      message: 'Issue assigned successfully',
+      success: true,
+      error: '',
+    };
+  } catch (error: unknown) {
+    return {
+      error: (error as Error).message,
+      success: false,
+    };
   }
 };

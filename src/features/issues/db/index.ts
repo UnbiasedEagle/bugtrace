@@ -70,3 +70,21 @@ export const deleteIssue = async (issueId: number) => {
     throw new Error('Failed to delete issue');
   }
 };
+
+export const assignUserToIssue = async (
+  issueId: number,
+  userId: string | null
+) => {
+  try {
+    await prisma.issue.update({
+      where: {
+        id: issueId,
+      },
+      data: {
+        assigneeId: userId,
+      },
+    });
+  } catch {
+    throw new Error('Failed to assign user to issue');
+  }
+};

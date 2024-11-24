@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Select,
   SelectContent,
@@ -7,22 +9,52 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { clerkClient } from '@clerk/nextjs/server';
+import { assignUserToIssueAction } from '../actions';
+import { toast } from 'sonner';
 
-export const AssigneeSelect = async () => {
-  const { data } = await (await clerkClient()).users.getUserList();
+interface Props {
+  users: {
+    id: string;
+    emailAddresses: string;
+  }[];
+  issue: {
+    id: number;
+    assigneeId: string | null;
+  };
+}
+
+export const AssigneeSelect = ({ users, issue }: Props) => {
+  const onValueChange = async (userId: string) => {
+    try {
+      const result = await assignUserToIssueAction(
+        issue.id,
+        userId === 'unassigned' ? null : userId
+      );
+      if (result.success) {
+        toast.success(result.message);
+      } else if (result.error) {
+        toast.error(result.error);
+      }
+    } catch {
+      toast.error('An error occurred while assigning the user');
+    }
+  };
 
   return (
-    <Select>
+    <Select
+      defaultValue={issue.assigneeId ?? undefined}
+      onValueChange={onValueChange}
+    >
       <SelectTrigger>
         <SelectValue placeholder='Assign...' />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Suggestions</SelectLabel>
-          {data.map((user) => (
+          <SelectItem value='unassigned'>Unassigned</SelectItem>
+          {users.map((user) => (
             <SelectItem key={user.id} value={user.id}>
-              {user.emailAddresses[0].emailAddress}
+              {user.emailAddresses}
             </SelectItem>
           ))}
         </SelectGroup>

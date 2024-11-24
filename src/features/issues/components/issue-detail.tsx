@@ -6,6 +6,7 @@ import { getIssue } from '../db';
 import { DeleteIssueDialog } from './delete-issue-dialog';
 import { EditIssueBtn } from './edit-issue-btn';
 import { AssigneeSelect } from './assignee-select';
+import { clerkClient } from '@clerk/nextjs/server';
 
 interface Props {
   issueId: string;
@@ -22,6 +23,13 @@ export const IssueDetail = async ({ issueId }: Props) => {
     notFound();
   }
 
+  const { data } = await (await clerkClient()).users.getUserList();
+
+  const users = data.map((user) => ({
+    id: user.id,
+    emailAddresses: user.emailAddresses[0].emailAddress,
+  }));
+
   return (
     <div className='grid gap-5 grid-cols-1 md:grid-cols-5'>
       <div className='md:col-span-4'>
@@ -37,7 +45,13 @@ export const IssueDetail = async ({ issueId }: Props) => {
         </Card>
       </div>
       <div className='space-y-3'>
-        <AssigneeSelect />
+        <AssigneeSelect
+          users={users}
+          issue={{
+            id: issue.id,
+            assigneeId: issue.assigneeId,
+          }}
+        />
         <EditIssueBtn issueId={issue.id} />
         <DeleteIssueDialog issueId={issue.id} />
       </div>
