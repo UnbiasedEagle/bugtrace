@@ -7,6 +7,7 @@ import { DeleteIssueDialog } from './delete-issue-dialog';
 import { EditIssueBtn } from './edit-issue-btn';
 import { AssigneeSelect } from './assignee-select';
 import { clerkClient } from '@clerk/nextjs/server';
+import { StatusSelect } from './status-select';
 
 interface Props {
   issueId: string;
@@ -45,6 +46,7 @@ export const IssueDetail = async ({ issueId }: Props) => {
         </Card>
       </div>
       <div className='space-y-3'>
+        <StatusSelect status={issue.status} issueId={issue.id} />
         <AssigneeSelect
           users={users}
           issue={{

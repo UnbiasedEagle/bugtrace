@@ -6,10 +6,12 @@ import {
   createIssue,
   deleteIssue,
   updateIssue,
+  updateIssueStatus,
 } from '../db';
 import { IssueSchema } from '../schemas';
 import { redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
+import { Status } from '@prisma/client';
 
 export const createIssueAction = async (
   prevState: unknown,
@@ -127,6 +129,26 @@ export const assignUserToIssueAction = async (
     revalidatePath(`/issues/${issueId}`);
     return {
       message: 'Issue assigned successfully',
+      success: true,
+      error: '',
+    };
+  } catch (error: unknown) {
+    return {
+      error: (error as Error).message,
+      success: false,
+    };
+  }
+};
+
+export const updateIssueStatusAction = async (
+  issueId: number,
+  status: Status
+) => {
+  try {
+    await updateIssueStatus(issueId, status);
+    revalidatePath(`/issues/${issueId}`);
+    return {
+      message: 'Issue status updated successfully',
       success: true,
       error: '',
     };

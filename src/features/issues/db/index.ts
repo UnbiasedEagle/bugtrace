@@ -140,3 +140,18 @@ export const getLatestIssues = async () => {
 
   return issuesWithAssignees;
 };
+
+export const updateIssueStatus = async (issueId: number, status: Status) => {
+  try {
+    await prisma.issue.update({
+      where: {
+        id: issueId,
+      },
+      data: {
+        status,
+      },
+    });
+  } catch {
+    throw new Error('Failed to update issue status');
+  }
+};
