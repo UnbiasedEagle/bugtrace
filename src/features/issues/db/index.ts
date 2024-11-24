@@ -155,3 +155,20 @@ export const updateIssueStatus = async (issueId: number, status: Status) => {
     throw new Error('Failed to update issue status');
   }
 };
+
+export const getIssueCountByStatus = async () => {
+  const counts = await prisma.issue.groupBy({
+    by: ['status'],
+    _count: {
+      id: true,
+    },
+  });
+
+  return counts.reduce(
+    (acc, count) => ({
+      ...acc,
+      [count.status]: count._count.id,
+    }),
+    {} as Record<Status, number>
+  );
+};

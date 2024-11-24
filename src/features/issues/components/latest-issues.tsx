@@ -10,8 +10,8 @@ export const LatestIssues = async () => {
   const latestIssues = await getLatestIssues();
 
   return (
-    <>
-      <h1 className='mb-4 font-bold text-2xl'>Latest Issues</h1>
+    <div>
+      <h1 className='mb-2 font-bold text-2xl'>Latest Issues</h1>
       <Card>
         <Table>
           <TableBody>
@@ -37,6 +37,6 @@ export const LatestIssues = async () => {
           </TableBody>
         </Table>
       </Card>
-    </>
+    </div>
   );
 };

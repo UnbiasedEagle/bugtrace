@@ -17,7 +17,7 @@ export const Navbar = () => {
   const pathName = usePathname();
 
   return (
-    <nav className='border-b mb-5 h-14 items-center'>
+    <nav className='border-b px-4 mb-5 h-14 items-center'>
       <div className='container mx-auto flex h-full items-center'>
         <Link className='mr-6' href='/'>
           <AiFillBug />

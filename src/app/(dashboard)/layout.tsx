@@ -5,7 +5,7 @@ const DashboardLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Navbar />
-      <div className='container mx-auto py-5'>{children}</div>
+      <div className='container mx-auto py-5 px-4'>{children}</div>
     </>
   );
 };
