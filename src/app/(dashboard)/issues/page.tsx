@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: 'TrackNest | Issues',
+  title: 'BugTrace | Issues',
   description: 'List of issues',
 };
 
