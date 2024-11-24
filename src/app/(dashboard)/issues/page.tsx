@@ -1,15 +1,36 @@
 import { IssueActions } from '@/features/issues/components/issue-actions';
 import { IssueListTable } from '@/features/issues/components/issue-list-table';
-import { LoadingIssueListTable } from '@/features/issues/components/loading-issue-list-table';
-import { Suspense } from 'react';
+import { getIssues } from '@/features/issues/db';
+import { Issue, Status } from '@prisma/client';
 
-const IssuesPage = () => {
+interface Props {
+  searchParams: Promise<{
+    status: Status;
+    orderBy: keyof Issue;
+  }>;
+}
+
+const IssuesPage = async ({ searchParams }: Props) => {
+  const statuses = Object.values(Status);
+
+  const params = await searchParams;
+  const status = statuses.includes(params.status) ? params.status : undefined;
+
+  const validOrderByColumns: (keyof Issue)[] = ['title', 'status', 'createdAt'];
+
+  const orderBy = validOrderByColumns.includes(params.orderBy)
+    ? params.orderBy
+    : 'createdAt';
+
+  const issues = await getIssues({
+    status,
+    orderBy,
+  });
+
   return (
     <div>
       <IssueActions />
-      <Suspense fallback={<LoadingIssueListTable />}>
-        <IssueListTable />
-      </Suspense>
+      <IssueListTable searchParams={params} issues={issues} />
     </div>
   );
 };

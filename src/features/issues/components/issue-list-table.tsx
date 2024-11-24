@@ -7,23 +7,63 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getIssues } from '@/features/issues/db';
+import { cn } from '@/lib/utils';
+import { Issue, Status } from '@prisma/client';
+import { ArrowUpIcon } from 'lucide-react';
 import Link from 'next/link';
 
-export const IssueListTable = async () => {
-  const issues = await getIssues();
+interface Props {
+  issues: Issue[];
+  searchParams: {
+    status: Status;
+    orderBy: keyof Issue;
+  };
+}
+
+export const IssueListTable = ({ issues, searchParams }: Props) => {
+  const columns: { label: string; value: keyof Issue; className?: string }[] = [
+    {
+      label: 'Issue',
+      value: 'title',
+    },
+    {
+      label: 'Status',
+      value: 'status',
+      className: 'hidden md:table-cell',
+    },
+    {
+      label: 'Created',
+      value: 'createdAt',
+      className: 'hidden md:table-cell',
+    },
+  ];
 
   return (
     <Table className='border'>
       <TableHeader>
         <TableRow className='bg-gray-200 hover:bg-gray-200'>
-          <TableHead className='font-bold text-black'>Issue</TableHead>
-          <TableHead className='font-bold text-black hidden md:table-cell'>
-            Status
-          </TableHead>
-          <TableHead className='font-bold text-black hidden md:table-cell'>
-            Created
-          </TableHead>
+          {columns.map((column) => (
+            <TableHead
+              key={column.value}
+              className={cn('font-bold text-black', column.className)}
+            >
+              <div className='flex items-center text-black space-x-0.5'>
+                <Link
+                  href={{
+                    query: {
+                      ...searchParams,
+                      orderBy: column.value,
+                    },
+                  }}
+                >
+                  {column.label}
+                </Link>
+                {column.value === searchParams.orderBy && (
+                  <ArrowUpIcon size={20} />
+                )}
+              </div>
+            </TableHead>
+          ))}
         </TableRow>
       </TableHeader>
       <TableBody>

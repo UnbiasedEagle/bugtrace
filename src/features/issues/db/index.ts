@@ -1,4 +1,5 @@
 import prisma from '@/lib/db';
+import { Issue, Status } from '@prisma/client';
 
 export const getIssue = async (issueId: number) => {
   const issue = await prisma.issue.findUnique({
@@ -10,10 +11,19 @@ export const getIssue = async (issueId: number) => {
   return issue;
 };
 
-export const getIssues = async () => {
+export const getIssues = async ({
+  status,
+  orderBy,
+}: {
+  status: Status | undefined;
+  orderBy: keyof Issue;
+}) => {
   const issues = await prisma.issue.findMany({
     orderBy: {
-      createdAt: 'desc',
+      [orderBy]: 'asc',
+    },
+    where: {
+      status: status,
     },
   });
 

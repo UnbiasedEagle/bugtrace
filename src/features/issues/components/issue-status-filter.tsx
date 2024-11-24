@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Select,
   SelectContent,
@@ -6,6 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Status } from '@prisma/client';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const statuses: { label: string; value: Status }[] = [
   {
@@ -23,8 +26,22 @@ const statuses: { label: string; value: Status }[] = [
 ];
 
 export const IssueStatusFilter = () => {
+  const params = useSearchParams();
+  const router = useRouter();
+
+  const handleStatusChange = (status: Status) => {
+    router.push(`/issues?status=${status}`);
+  };
+
+  const status =
+    params.get('status') === 'all'
+      ? 'all'
+      : Object.values(Status).includes(params.get('status') as Status)
+      ? (params.get('status') as Status)
+      : '';
+
   return (
-    <Select>
+    <Select defaultValue={status} onValueChange={handleStatusChange}>
       <SelectTrigger className='w-[180px]'>
         <SelectValue placeholder='Filter by status...' />
       </SelectTrigger>
