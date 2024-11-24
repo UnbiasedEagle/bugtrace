@@ -30,7 +30,9 @@ export const IssueStatusFilter = () => {
   const router = useRouter();
 
   const handleStatusChange = (status: Status) => {
-    router.push(`/issues?status=${status}`);
+    const currentParams = new URLSearchParams(params);
+    currentParams.set('status', status);
+    router.push(`/issues?${currentParams.toString()}`);
   };
 
   const status =
