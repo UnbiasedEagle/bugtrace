@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { assignUserToIssueAction } from '../actions';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 interface Props {
   users: {
@@ -24,8 +25,11 @@ interface Props {
 }
 
 export const AssigneeSelect = ({ users, issue }: Props) => {
+  const [assigningUser, setAssigningUser] = useState(false);
+
   const onValueChange = async (userId: string) => {
     try {
+      setAssigningUser(true);
       const result = await assignUserToIssueAction(
         issue.id,
         userId === 'unassigned' ? null : userId
@@ -37,11 +41,14 @@ export const AssigneeSelect = ({ users, issue }: Props) => {
       }
     } catch {
       toast.error('An error occurred while assigning the user');
+    } finally {
+      setAssigningUser(false);
     }
   };
 
   return (
     <Select
+      disabled={assigningUser}
       defaultValue={issue.assigneeId ?? undefined}
       onValueChange={onValueChange}
     >
