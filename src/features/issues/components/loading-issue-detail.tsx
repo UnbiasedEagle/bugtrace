@@ -14,6 +14,7 @@ export const LoadingIssueDetail = () => {
       <div className='flex flex-col space-y-3'>
         <Skeleton className='h-10 w-full' />
         <Skeleton className='h-10 w-full' />
+        <Skeleton className='h-10 w-full' />
       </div>
     </div>
   );

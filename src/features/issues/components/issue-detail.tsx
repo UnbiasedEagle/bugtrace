@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { getIssue } from '../db';
 import { DeleteIssueDialog } from './delete-issue-dialog';
 import { EditIssueBtn } from './edit-issue-btn';
+import { AssigneeSelect } from './assignee-select';
 
 interface Props {
   issueId: string;
@@ -36,6 +37,7 @@ export const IssueDetail = async ({ issueId }: Props) => {
         </Card>
       </div>
       <div className='space-y-3'>
+        <AssigneeSelect />
         <EditIssueBtn issueId={issue.id} />
         <DeleteIssueDialog issueId={issue.id} />
       </div>
