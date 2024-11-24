@@ -2,6 +2,7 @@ import { PAGE_SIZE } from '@/lib/constants';
 import prisma from '@/lib/db';
 import { clerkClient } from '@clerk/nextjs/server';
 import { Issue, Status } from '@prisma/client';
+import { notFound } from 'next/navigation';
 
 export const getIssue = async (issueId: number) => {
   const issue = await prisma.issue.findUnique({
@@ -9,6 +10,10 @@ export const getIssue = async (issueId: number) => {
       id: issueId,
     },
   });
+
+  if (!issue) {
+    return notFound();
+  }
 
   return issue;
 };

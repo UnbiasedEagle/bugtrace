@@ -4,6 +4,7 @@ import { IssueListTable } from '@/features/issues/components/issue-list-table';
 import { getIssues } from '@/features/issues/db';
 import { PAGE_SIZE } from '@/lib/constants';
 import { Issue, Status } from '@prisma/client';
+import { Metadata } from 'next';
 
 interface Props {
   searchParams: Promise<{
@@ -12,6 +13,11 @@ interface Props {
     page?: string;
   }>;
 }
+
+export const metadata: Metadata = {
+  title: 'TrackNest | Issues',
+  description: 'List of issues',
+};
 
 const IssuesPage = async ({ searchParams }: Props) => {
   const statuses = Object.values(Status);
