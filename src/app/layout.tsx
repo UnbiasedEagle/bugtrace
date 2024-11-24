@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Bug Trace',
+  title: 'TrackNest',
   description:
-    'Simplify project management with fast, efficient issue tracking and team collaboration.',
+    'TrackNest is a simple and intuitive issue-tracking web app that allows you to create, manage, and resolve issues efficiently. Assign tasks to users, update statuses, and stay organized with seamless CRUD operations. Simplify your workflow with TrackNest.',
 };
 
 export default function RootLayout({
