@@ -1,10 +1,10 @@
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { getLatestIssues } from '../db';
-import Link from 'next/link';
 import { IssueBadge } from '@/components/issue-badge';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import Link from 'next/link';
+import { getLatestIssues } from '../db';
 
 export const LatestIssues = async () => {
   const latestIssues = await getLatestIssues();
