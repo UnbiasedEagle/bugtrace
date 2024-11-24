@@ -1,9 +1,7 @@
+import { LatestIssues } from '@/features/issues/components/latest-issues';
+
 const HomePage = () => {
-  return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
-  );
+  return <LatestIssues />;
 };
 
 export default HomePage;

@@ -1,5 +1,6 @@
 import { PAGE_SIZE } from '@/lib/constants';
 import prisma from '@/lib/db';
+import { clerkClient } from '@clerk/nextjs/server';
 import { Issue, Status } from '@prisma/client';
 
 export const getIssue = async (issueId: number) => {
@@ -107,4 +108,35 @@ export const assignUserToIssue = async (
   } catch {
     throw new Error('Failed to assign user to issue');
   }
+};
+
+export const getLatestIssues = async () => {
+  const issues = await prisma.issue.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 5,
+  });
+
+  const issuesWithAssignees = [];
+
+  for (const issue of issues) {
+    if (issue.assigneeId) {
+      const assignee = await (
+        await clerkClient()
+      ).users.getUser(issue.assigneeId);
+
+      issuesWithAssignees.push({
+        ...issue,
+        assignee,
+      });
+    } else {
+      issuesWithAssignees.push({
+        ...issue,
+        assignee: null,
+      });
+    }
+  }
+
+  return issuesWithAssignees;
 };
