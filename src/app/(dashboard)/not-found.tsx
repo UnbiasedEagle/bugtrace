@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const NotFoundPage = () => {
   return (
-    <section className='bg-white flex items-center justify-center h-screen dark:bg-gray-900'>
+    <section className='bg-white h-[80vh] flex items-center justify-center dark:bg-gray-900'>
       <div className='py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6'>
         <div className='mx-auto max-w-screen-sm text-center'>
           <h1 className='mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500'>
