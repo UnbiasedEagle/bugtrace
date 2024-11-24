@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from '@/lib/constants';
 import prisma from '@/lib/db';
 import { Issue, Status } from '@prisma/client';
 
@@ -30,8 +31,8 @@ export const getIssues = async ({
         [orderBy]: 'asc',
       },
       where,
-      skip: (page - 1) * 10,
-      take: 10,
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
     }),
     prisma.issue.count({ where }),
   ]);

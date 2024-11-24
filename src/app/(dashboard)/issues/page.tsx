@@ -24,7 +24,11 @@ const IssuesPage = async ({ searchParams }: Props) => {
     ? params.orderBy
     : 'createdAt';
 
-  const page = params.page ?? '1';
+  let page = params.page ? Number(params.page) : 1;
+
+  if (isNaN(page) || page < 1) {
+    page = 1;
+  }
 
   const { issues, count } = await getIssues({
     status,
