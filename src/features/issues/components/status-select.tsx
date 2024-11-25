@@ -10,6 +10,7 @@ import {
 import { Status } from '@prisma/client';
 import { toast } from 'sonner';
 import { updateIssueStatusAction } from '../actions';
+import { useState } from 'react';
 
 interface Props {
   issueId: number;
@@ -35,8 +36,11 @@ const statuses: {
 ];
 
 export const StatusSelect = ({ issueId, status }: Props) => {
+  const [loading, setLoading] = useState(false);
+
   const handleStatusChange = async (status: Status) => {
     try {
+      setLoading(true);
       const response = await updateIssueStatusAction(issueId, status);
       if (response.success) {
         toast.success(response.message);
@@ -45,11 +49,17 @@ export const StatusSelect = ({ issueId, status }: Props) => {
       }
     } catch {
       toast.error('An error occurred while updating the status');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Select onValueChange={handleStatusChange} defaultValue={status}>
+    <Select
+      disabled={loading}
+      onValueChange={handleStatusChange}
+      defaultValue={status}
+    >
       <SelectTrigger>
         <SelectValue placeholder='Select status...' />
       </SelectTrigger>
