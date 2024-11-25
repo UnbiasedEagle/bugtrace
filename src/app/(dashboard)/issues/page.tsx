@@ -1,10 +1,9 @@
-import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
 import { IssueActions } from '@/features/issues/components/issue-actions';
 import { IssueListTable } from '@/features/issues/components/issue-list-table';
-import { getIssues } from '@/features/issues/db';
-import { PAGE_SIZE } from '@/lib/constants';
+import { LoadingIssueListTable } from '@/features/issues/components/loading-issue-list-table';
 import { Issue, Status } from '@prisma/client';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 interface Props {
   searchParams: Promise<{
@@ -37,23 +36,12 @@ const IssuesPage = async ({ searchParams }: Props) => {
     page = 1;
   }
 
-  const { issues, count } = await getIssues({
-    status,
-    orderBy,
-    page: +page,
-  });
-
   return (
     <div>
       <IssueActions />
-      <IssueListTable searchParams={params} issues={issues} />
-      <div className='mt-5'>
-        <PaginationWithLinks
-          page={+page}
-          pageSize={PAGE_SIZE}
-          totalCount={count}
-        />
-      </div>
+      <Suspense fallback={<LoadingIssueListTable />}>
+        <IssueListTable status={status} orderBy={orderBy} page={page} />
+      </Suspense>
     </div>
   );
 };
