@@ -29,7 +29,7 @@ export const IssueSummary = async () => {
       {issueStatuses.map((issueStatus) => (
         <Card key={issueStatus.label}>
           <CardContent className='p-4'>
-            <Link href={`/issues?status=${issueStatus.status}`}>
+            <Link href={`/issues/list?status=${issueStatus.status}`}>
               <p className='text-sm mb-2 font-medium text-neutral-500'>
                 {issueStatus.label}
               </p>

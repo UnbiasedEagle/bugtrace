@@ -33,7 +33,7 @@ export const IssueStatusFilter = () => {
     const currentParams = new URLSearchParams(params);
     currentParams.set('status', status);
     currentParams.delete('page');
-    router.push(`/issues?${currentParams.toString()}`);
+    router.push(`/issues/list?${currentParams.toString()}`);
   };
 
   const status =

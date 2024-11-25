@@ -9,7 +9,7 @@ import { Skeleton } from '../ui/skeleton';
 
 const links = [
   { href: '/', label: 'Dashboard' },
-  { href: '/issues', label: 'Issues' },
+  { href: '/issues/list', label: 'Issues' },
 ];
 
 export const Navbar = () => {

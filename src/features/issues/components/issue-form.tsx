@@ -55,7 +55,7 @@ const IssueForm = ({ issue }: Props) => {
     if (state?.error) {
       toast.error(state.error);
     } else if (state?.success) {
-      router.push('/issues');
+      router.push('/issues/list');
       toast.success(state.message);
     }
   }, [state?.error, state?.success, router, state?.message]);

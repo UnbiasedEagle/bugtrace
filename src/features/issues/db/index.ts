@@ -24,7 +24,7 @@ export const getIssues = async ({
   page,
 }: {
   status: Status | undefined;
-  orderBy: keyof Issue;
+  orderBy?: keyof Issue;
   page: number;
 }) => {
   const where = {
@@ -33,9 +33,7 @@ export const getIssues = async ({
 
   const [issues, count] = await Promise.all([
     prisma.issue.findMany({
-      orderBy: {
-        [orderBy]: 'asc',
-      },
+      orderBy: orderBy ? { [orderBy]: 'asc' } : { createdAt: 'desc' },
       where,
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,

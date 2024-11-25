@@ -18,7 +18,7 @@ import { getIssues } from '../db';
 
 interface Props {
   status?: Status;
-  orderBy: keyof Issue;
+  orderBy?: keyof Issue;
   page: number;
 }
 

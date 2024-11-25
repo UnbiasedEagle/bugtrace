@@ -28,7 +28,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   const orderBy = validOrderByColumns.includes(params.orderBy)
     ? params.orderBy
-    : 'createdAt';
+    : undefined;
 
   let page = params.page ? Number(params.page) : 1;
 

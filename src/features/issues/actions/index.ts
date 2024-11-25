@@ -38,7 +38,7 @@ export const createIssueAction = async (
       description: validate.data.description,
     });
 
-    revalidatePath('/issues');
+    revalidatePath('/issues/list');
 
     return {
       message: 'Issue created successfully',
@@ -80,7 +80,7 @@ export const updateIssueAction = async (
       description: validate.data.description,
     });
 
-    revalidatePath('/issues');
+    revalidatePath('/issues/list');
 
     return {
       message: 'Issue updated successfully',
@@ -106,8 +106,8 @@ export const deleteIssueAction = async (issueId: number) => {
     }
 
     await deleteIssue(issueId);
-    revalidatePath('/issues');
-    redirectPath = '/issues';
+    revalidatePath('/issues/list');
+    redirectPath = '/issues/list';
   } catch (error) {
     return {
       error: (error as Error).message,
