@@ -1,11 +1,13 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useAuth, UserButton } from '@clerk/nextjs';
+import { useAuth, useClerk } from '@clerk/nextjs';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { AiFillBug } from 'react-icons/ai';
 import { Skeleton } from '../ui/skeleton';
+import { LogOut } from 'lucide-react';
+import { Button } from '../ui/button';
 
 const links = [
   { href: '/', label: 'Dashboard' },
@@ -39,9 +41,30 @@ export const Navbar = () => {
         </ul>
         <div className='flex items-center ml-auto'>
           {!isLoaded && <Skeleton className='h-8 w-8 rounded-full' />}
-          {isLoaded && <UserButton />}
+          {isLoaded && <SignOutBtn />}
         </div>
       </div>
     </nav>
+  );
+};
+
+export const SignOutBtn = () => {
+  const router = useRouter();
+  const { signOut } = useClerk();
+  return (
+    <Button
+      onClick={() => {
+        signOut({ redirectUrl: '/' });
+        router.push('/');
+      }}
+      asChild
+      variant='ghost'
+      className='w-full cursor-pointer justify-start text-muted-foreground hover:text-foreground'
+    >
+      <div className='flex items-center gap-3'>
+        <LogOut size={16} />
+        Sign out
+      </div>
+    </Button>
   );
 };
