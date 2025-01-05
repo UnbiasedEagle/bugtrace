@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { useAuth, useClerk } from '@clerk/nextjs';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { AiFillBug } from 'react-icons/ai';
 import { Skeleton } from '../ui/skeleton';
 import { LogOut } from 'lucide-react';
@@ -49,13 +49,13 @@ export const Navbar = () => {
 };
 
 export const SignOutBtn = () => {
-  const router = useRouter();
   const { signOut } = useClerk();
+
   return (
     <Button
       onClick={() => {
         signOut();
-        router.push('/');
+        window.location.href = '/';
       }}
       asChild
       variant='ghost'
