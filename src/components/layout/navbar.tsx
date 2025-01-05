@@ -54,7 +54,7 @@ export const SignOutBtn = () => {
   return (
     <Button
       onClick={() => {
-        signOut({ redirectUrl: '/' });
+        signOut();
         router.push('/');
       }}
       asChild
